@@ -1,12 +1,43 @@
 # Architecture
 ## Public:
-![image](https://raw.githubusercontent.com/airmonitor/cdk-serverless-web-form/main/architecture/public.png)*
+![image](https://raw.githubusercontent.com/airmonitor/cdk-serverless-web-form/main/architecture/public.png)
 
 ## Private:
 (not included in this repository)
 ![image](https://raw.githubusercontent.com/airmonitor/cdk-serverless-web-form/main/architecture/private.png)
 
 
+# Working example
+
+![website](https://raw.githubusercontent.com/airmonitor/cdk-serverless-web-form/main/architecture/website.png)
+
+# Pre-requisites
+* Create file ***cdk/config/dev/config.yaml*** with below content, replace account and region
+
+```shell
+  dev_aws_account: "11223344"
+  dev_aws_region: "eu-central-1"
+```
+
+* Create file ***cdk/config/config-ci-cd.yaml*** with below content, replace necessary sections
+```shell
+    project: "cdk-serverless-web-form"
+    aws_account: "11223344"
+    aws_region: "eu-central-1"
+    dev_aws_account: "11223344"
+    dev_aws_region: "eu-central-1"
+    repository: "cdk-serverless-web-form"
+    ci_cd_notification_email: my.email@gmail.com
+    alarm_emails:
+      - my.email@gmail.com
+    slack_workspace_id: "" # CI/CD notifications through slack
+    slack_channel_id: "" # CI/CD notifications through slack
+    tags:
+      Repo: "https://github.com/airmonitor/cdk-serverless-web-form"
+
+```
+
+# Deployment
 To manually create a virtualenv on MacOS and Linux:
 
 ```
@@ -28,31 +59,13 @@ If you are a Windows platform, you would activate the virtualenv like this:
 
 Once the virtualenv is activated, you can install the required dependencies.
 
-```
-$ pip install --upgrade -r requirements.txt
-$ pip install --upgrade -r requirements-dev.txt
-$ pre-commit install
-$ cd services/layers/frontend/python/lib/python3.9/site-packages
-$ pip install -r requirements.txt -t .
-$ cd services/layers/create_jira_task/python/lib/python3.9/site-packages
-$ pip install -r requirements.txt -t .
-$ cd services/layers/send_email_notification/python/lib/python3.9/site-packages
-$ pip install -r requirements.txt -t .
+```shell
+    cd services/layers/frontend/python/lib/python3.9/site-packages
+    pip install --upgrade -r requirements.txt -t .
+    cdk synth
+    cdk deploy cdk-serverless-web-form-pipeline/dev-cdk-serverless-web-form-services-stage/frontend-service-stack
 
 ```
-
-At this point you can now synthesize the CloudFormation template for this code.
-
-```
-$ cdk synth
-```
-
-And deploy
-
-```
-$ cdk deploy
-```
-
 
 To add additional dependencies, for example other CDK libraries, just add
 them to your `setup.py` file and rerun the `pip install -r requirements.txt`
@@ -67,41 +80,3 @@ command.
  * `cdk docs`        open CDK documentation
 
 Enjoy!
-
-# Documentation
-
-Solution has been deployed to Shared & Management account (174334470447)
-## Pre-requisites
-* Create file ***cdk/config/dev/config.yaml*** with below content, replace account and region
-
-```shell
-  dev_aws_account: "11223344"
-  dev_aws_region: "eu-central-1"
-```
-
-
-* Create file ***cdk/config/config-ci-cd.yaml*** with below content, replace necessary sections
-```shell
-    project: "cdk-serverless-web-form"
-    aws_account: "11223344"
-    aws_region: "eu-central-1"
-    dev_aws_account: "11223344"
-    dev_aws_region: "eu-central-1"
-    repository: "cdk-serverless-web-form"
-    ci_cd_notification_email: my.email@gmail.com
-    alarm_emails:
-      - my.email@gmail.com
-    slack_workspace_id: "" # CI/CD notifications through slack
-    slack_channel_id: "" # CI/CD notifications through slack
-    tags:
-      Repo: "https://github.com/airmonitor/cdk-serverless-web-form"
-
-```
-
-## Deployment procedure
-```shell
-    cd services/layers/frontend/python/lib/python3.9/site-packages
-    pip install --upgrade -r requirements.txt -t .
-    cdk synth
-    cdk deploy cdk-serverless-web-form-pipeline/dev-cdk-serverless-web-form-services-stage/frontend-service-stack
-```
