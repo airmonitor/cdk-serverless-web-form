@@ -17,11 +17,9 @@ from aws_cdk.aws_codestarnotifications import DetailType, NotificationRule
 from constructs import Construct
 
 from cdk.schemas.configuration_vars import PipelineVars
-from cdk.stages.code_quality_stage import CodeQualityStage
-from cdk.stages.repository_stage import RepositoryStage
 from cdk.stages.services_stage import ServicesStage
 from cdk.stages.shared_resources_stage import SharedResourcesStage
-from cdk.utils.utils import check_ansible_dir, apply_tags
+from cdk.utils.utils import apply_tags
 
 
 class PipelineStack(cdk.Stack):
@@ -83,8 +81,6 @@ class PipelineStack(cdk.Stack):
             stage="dev",
         )
 
-        self.repository_stage(env=env, pipeline=self.codepipeline, props=props, pipeline_vars=pipeline_vars)
-
         self.codepipeline.build_pipeline()
 
         self.create_pipeline_notifications(notifications_sns_topic=notifications_sns_topic, pipeline_vars=pipeline_vars)
@@ -137,84 +133,6 @@ class PipelineStack(cdk.Stack):
         trigger.add_target(events_targets.CodePipeline(self.codepipeline.pipeline))
         apply_tags(props=props, resource=trigger)
 
-    def repository_stage(
-        self, env: cdk.Environment, pipeline: pipelines.CodePipeline, props: dict, pipeline_vars: PipelineVars
-    ) -> None:
-        """Create CodeCommit repository stage.
-
-        :param env: The AWS CDK Environment class which provide AWS Account ID and AWS Region
-        :param pipeline: The AWS CDK pipelines CdkPipeline object
-        :param props: The dictionary loaded from config directory
-        :param pipeline_vars: Pydantic model that contains configuration values loaded initially from config files
-        :return: None
-        """
-        stage = RepositoryStage(
-            self,
-            construct_id=f"{pipeline_vars.project}-repository-stage",
-            env=env,
-            props=props,
-        )
-        apply_tags(props=props, resource=stage)
-        pipeline.add_stage(stage=stage)
-
-    def code_quality_stage(
-        self,
-        env: cdk.Environment,
-        pipeline: pipelines.CodePipeline,
-        props: dict,
-        stage: str,
-        pipeline_vars: PipelineVars,
-    ) -> None:
-        """Create CI/CD stage which contain several jobs for checking code
-        quality using various linters. Stage will be added to provided in
-        arguments pipeline.
-
-        :param pipeline_vars: Pydantic model that contains configuration values loaded initially from config files
-        :param env: The AWS CDK Environment class which provide AWS Account ID and AWS Region
-        :param pipeline: The AWS CDK pipelines CdkPipeline object
-        :param props: The dictionary loaded from config directory.
-        :param stage: The stage at which deploy - example: dr, prod, ppe
-
-        :return: None
-        """
-        props["stage"] = stage
-        stage = CodeQualityStage(
-            self,
-            construct_id=f"{stage}-{pipeline_vars.project}-code-quality-stage",
-            env=env,
-            props=props,
-        )
-        apply_tags(props=props, resource=stage)
-
-        pre_commit = pipelines.ShellStep(
-            "pre-commit",
-            commands=[
-                "git init .",
-                "git add .",
-                "python3.9 -m pip install --upgrade pip",
-                "pip install -r cdk/stacks/requirements.txt",
-                "pre-commit run --files app.py",
-                "pre-commit run --files cdk/schemas/*.py",
-                "pre-commit run --files cdk/stacks/*.py",
-                "pre-commit run --files cdk/stages/*.py",
-                "pre-commit run --files cdk/utils/*.py",
-            ],
-        )
-
-        ansible_lint = pipelines.ShellStep(
-            "ansible-lint",
-            commands=[
-                "pip install -r cdk/stacks/requirements.txt",
-                "ansible-lint -p --nocolor ansible/",
-            ],
-        )
-
-        pre_jobs = [pre_commit]
-        if check_ansible_dir(directory="../ansible"):
-            pre_jobs.append(ansible_lint)
-
-        pipeline.add_stage(stage=stage, pre=pre_jobs)
-
     def environment_type(self, env: cdk.Environment, stage: str, props: Dict, pipeline_vars: PipelineVars):
         """Create environment using dedicated AWS account, including different
         AWS region.
@@ -241,12 +159,12 @@ class PipelineStack(cdk.Stack):
         self.services_stage(env=env, pipeline=self.codepipeline, props=props, pipeline_vars=pipeline_vars, stage=stage)
 
     def shared_resources_stage(
-        self,
-        env: cdk.Environment,
-        stage: str,
-        pipeline: pipelines.CodePipeline,
-        props: Dict,
-        pipeline_vars: PipelineVars,
+            self,
+            env: cdk.Environment,
+            stage: str,
+            pipeline: pipelines.CodePipeline,
+            props: Dict,
+            pipeline_vars: PipelineVars,
     ) -> None:
         """Create core shared resources stage.
 
@@ -267,12 +185,12 @@ class PipelineStack(cdk.Stack):
         pipeline.add_stage(stage=stage)
 
     def services_stage(
-        self,
-        env: cdk.Environment,
-        stage: str,
-        pipeline: pipelines.CodePipeline,
-        props: Dict,
-        pipeline_vars: PipelineVars,
+            self,
+            env: cdk.Environment,
+            stage: str,
+            pipeline: pipelines.CodePipeline,
+            props: Dict,
+            pipeline_vars: PipelineVars,
     ) -> None:
         """Create core shared resources stage.
 
