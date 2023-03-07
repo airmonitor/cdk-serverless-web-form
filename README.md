@@ -1,3 +1,12 @@
+# Architecture
+## Public:
+![image](https://raw.githubusercontent.com/airmonitor/cdk-serverless-web-form/main/architecture/public.png)*
+
+## Private:
+(not included in this repository)
+![image](https://raw.githubusercontent.com/airmonitor/cdk-serverless-web-form/main/architecture/private.png)
+
+
 To manually create a virtualenv on MacOS and Linux:
 
 ```
@@ -81,7 +90,7 @@ Solution has been deployed to Shared & Management account (174334470447)
     repository: "cdk-serverless-web-form"
     ci_cd_notification_email: my.email@gmail.com
     alarm_emails:
-      - my.emai@gmail.com
+      - my.email@gmail.com
     slack_workspace_id: "" # CI/CD notifications through slack
     slack_channel_id: "" # CI/CD notifications through slack
     tags:
@@ -91,6 +100,8 @@ Solution has been deployed to Shared & Management account (174334470447)
 
 ## Deployment procedure
 ```shell
+    cd services/layers/frontend/python/lib/python3.9/site-packages
+    pip install --upgrade -r requirements.txt -t .
     cdk synth
     cdk deploy cdk-serverless-web-form-pipeline/dev-cdk-serverless-web-form-services-stage/frontend-service-stack
 ```
