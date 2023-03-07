@@ -83,15 +83,6 @@ class FrontEndStack(cdk.Stack):
                     iam.PolicyStatement(
                         actions=["execute-api:Invoke"],
                         resources=["execute-api:/*/*/*"],
-                        effect=iam.Effect.DENY,
-                        principals=[iam.StarPrincipal()],
-                        conditions={
-                            "NotIpAddress": {"aws:SourceIp": ["46.227.242.211", "165.225.206.0/23"]},
-                        },
-                    ),
-                    iam.PolicyStatement(
-                        actions=["execute-api:Invoke"],
-                        resources=["execute-api:/*/*/*"],
                         effect=iam.Effect.ALLOW,
                         principals=[iam.StarPrincipal()],
                     ),
