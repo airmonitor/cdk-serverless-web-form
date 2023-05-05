@@ -107,6 +107,10 @@ class FrontEndStack(cdk.Stack):
         """
         return [
             {
+                "id": "AwsSolutions-L1",
+                "reason": "False positive, lambda is using latest runtime",
+            },
+            {
                 "id": "AwsSolutions-APIG2",
                 "reason": "Validation is conducted in a Flask application itself",
             },
