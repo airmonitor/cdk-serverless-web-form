@@ -3,7 +3,7 @@ aws-lambda-powertools==2.15.0
 cdk-nag==2.27.8
 cdk-opinionated-constructs==2.0.1
 constructs==10.2.24
-docutils==0.19
+docutils==0.20
 email-validator==2.0.0.post2
 flask==2.3.2
 pydantic==1.10.7
