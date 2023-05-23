@@ -19,6 +19,10 @@ https://cdk-serverless-web-form.airmonitor.pl/
 ```shell
   dev_aws_account: "11223344"
   dev_aws_region: "eu-central-1"
+  domain_name: cdk-serverless-web-form.airmonitor.pl
+  acm_certificate_arn: arn:aws:acm:eu-central-1:112233445566:certificate/aabbvcdd
+  hosted_zone_id: ZDGF14WERS4334252
+  hosted_zone_name: airmonitor.pl
 ```
 
 * Create file ***cdk/config/config-ci-cd.yaml*** with below content, replace necessary sections
