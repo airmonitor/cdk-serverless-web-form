@@ -7,6 +7,8 @@ import aws_cdk.aws_apigateway as apigw
 import aws_cdk.aws_iam as iam
 import aws_cdk.aws_sns as sns
 import aws_cdk.aws_lambda as lmb
+import aws_cdk.aws_route53 as route53
+import aws_cdk.aws_route53_targets as route53_targets
 import aws_cdk.aws_cloudwatch as cloudwatch
 from constructs import Construct
 import cdk_monitoring_constructs as cdk_monitoring
@@ -34,8 +36,8 @@ class FrontEndStack(cdk.Stack):
         config_vars = ConfigurationVars(**props)
         imported_resources = ImportedResources(self, construct_id="imported_resources", props=props, env=env)
         self.imported_event_bridge_bus = imported_resources.default_event_bus
-        # self.ssm_param_authorization_key = imported_resources.imported_ssm_parameter_authorization_key
-        # self.ssm_param_csrf_key = imported_resources.imported_ssm_parameter_csrf_key
+        self.imported_certificate = imported_resources.imported_certificate
+        self.imported_hosted_zone = imported_resources.imported_hosted_zone
 
         aws_lambda_function_name = "frontend"
         aws_lambda_construct = AWSPythonLambdaFunction(self, f"{aws_lambda_function_name}_construct")
@@ -55,11 +57,6 @@ class FrontEndStack(cdk.Stack):
                 "LOG_SAMPLING_RATE": "1.0",
                 "POWERTOOLS_SERVICE_NAME": f"{aws_lambda_function_name.replace('_', '-')}",
                 "CURRENT_REGION": env.region,
-                # "EVENT_BUS_NAME": self.imported_event_bridge_bus.event_bus_name,
-                # "EVENT_SOURCE_NAME": f"{config_vars.project}-front-end-lambda",
-                # "EVENT_DETAIL_TYPE": "form-details",
-                # "AUTHORIZATION_KEY": self.ssm_param_authorization_key.parameter_name,
-                # "CSRF_KEY": self.ssm_param_csrf_key.parameter_name,
             },
             function_name=f"{config_vars.project}-{aws_lambda_function_name.replace('_', '-')}",
             handler="handler.handler",
@@ -68,9 +65,6 @@ class FrontEndStack(cdk.Stack):
             signing_config=aws_lambda_signing_config,
             timeout=26,
         )
-
-        # self.ssm_param_authorization_key.grant_read(aws_lambda_function)
-        # self.ssm_param_csrf_key.grant_read(aws_lambda_function)
 
         # Create api gateway proxy method
         api_gw = apigw.LambdaRestApi(
@@ -90,7 +84,22 @@ class FrontEndStack(cdk.Stack):
             ),
             proxy=True,
             rest_api_name=f"{config_vars.project}-api-gateway",
+            domain_name=apigw.DomainNameOptions(
+                domain_name=config_vars.domain_name,
+                certificate=self.imported_certificate,
+                security_policy=apigw.SecurityPolicy.TLS_1_2,
+            ),
         )
+
+        # Add a route53 record for API GW
+        route53.ARecord(
+            self,
+            id="api_record",
+            record_name=config_vars.domain_name,
+            zone=self.imported_hosted_zone,
+            target=route53.RecordTarget.from_alias(route53_targets.ApiGateway(api_gw)),
+        )
+
         # Validate stack against AWS Solutions checklist
         NagSuppressions.add_stack_suppressions(self, self.nag_suppression())
         Aspects.of(self).add(AwsSolutionsChecks(log_ignores=True))
