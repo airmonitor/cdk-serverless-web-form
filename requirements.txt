@@ -9,5 +9,5 @@ flask==2.3.2
 pydantic==1.10.9
 pydoctor==23.4.1
 pyyaml==6.0
-setuptools==67.8.0 # not directly required, pinned by Snyk to avoid a vulnerability
+setuptools==68.0.0 # not directly required, pinned by Snyk to avoid a vulnerability
 werkzeug==2.3.6
