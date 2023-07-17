@@ -2,7 +2,7 @@ aws-cdk-lib==2.86.0
 aws-lambda-powertools==2.19.0
 cdk-nag==2.27.65
 cdk-opinionated-constructs==2.1.4
-constructs==10.2.67
+constructs==10.2.69
 docutils==0.20.1
 email-validator==2.0.0.post2
 flask==2.3.2
