@@ -1,13 +1,14 @@
-aws-cdk-lib==2.94.0
+aws-cdk-lib==2.96.2
 aws-lambda-powertools==2.25.0
-cdk-nag==2.27.107
-cdk-opinionated-constructs==2.1.4
-constructs==10.2.69
+cdk-nag==2.27.135
+cdk-opinionated-constructs==3.0.0
+constructs==10.2.70
 docutils==0.20.1
 email-validator==2.0.0.post2
 flask==2.3.3
-pydantic==1.10.9
+pydantic==2.3.0
+pydantic-core==2.6.3
 pydoctor==23.4.1
-pyyaml==6.0
-setuptools==67.8.0 # not directly required, pinned by Snyk to avoid a vulnerability
+pyyaml==6.0.1
+setuptools==68.2.2 # not directly required, pinned by Snyk to avoid a vulnerability
 werkzeug==2.3.7

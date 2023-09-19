@@ -33,6 +33,6 @@ class ConfigurationVars(PipelineVars):
     stage: Literal["dev", "stg", "prod"]
     alarm_emails: list[EmailStr]
     domain_name: str
-    acm_certificate_arn: str
+    acm_certificate_arn: constr(pattern="^arn:aws:acm:*")  # type: ignore
     hosted_zone_id: str
     hosted_zone_name: str

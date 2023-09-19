@@ -15,5 +15,4 @@ def openfile(filename):
         text = input_file.read()
 
     html = markdown.markdown(text)
-    data = {"text": html}
-    return data
+    return {"text": html}

@@ -9,6 +9,10 @@ updates:
       schedule:
         interval: "weekly"
     - package-ecosystem: "pip"
-      directory: "/cdk/stacks/"
+      directory: "cdk/stacks/"
+      schedule:
+        interval: "weekly"
+    - package-ecosystem: "pip"
+      directory: "services/layers/frontend/python/lib/python3.11/site-packages"
       schedule:
         interval: "weekly"
