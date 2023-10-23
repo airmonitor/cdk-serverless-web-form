@@ -4,7 +4,7 @@ cdk-nag==2.27.163
 cdk-opinionated-constructs==3.2.0
 constructs==10.3.0
 docutils==0.20.1
-email-validator==2.0.0.post2
+email-validator==2.1.0.post1
 flask==3.0.0
 pydantic==2.4.2
 pydantic-core==2.10.1
