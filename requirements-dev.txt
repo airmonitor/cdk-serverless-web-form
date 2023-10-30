@@ -2,3 +2,4 @@ boto3==1.28.68
 click==8.1.7
 docutils==0.20.1
 pydoctor==23.9.0
+twisted>=23.10.0rc1 # not directly required, pinned by Snyk to avoid a vulnerability
