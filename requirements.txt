@@ -1,4 +1,4 @@
-aws-cdk-lib==2.102.0
+aws-cdk-lib==2.103.1
 aws-lambda-powertools==2.26.0
 cdk-nag==2.27.170
 cdk-opinionated-constructs==3.2.0
