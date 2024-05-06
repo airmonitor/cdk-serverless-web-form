@@ -10,6 +10,6 @@ pydantic==2.7.0
 pydantic-core==2.18.2
 pydoctor==23.9.1
 pyyaml==6.0.1
-setuptools==68.2.2 # not directly required, pinned by Snyk to avoid a vulnerability
+setuptools==69.5.1 # not directly required, pinned by Snyk to avoid a vulnerability
 werkzeug==3.0.3
 twisted>=23.10.0rc1 # not directly required, pinned by Snyk to avoid a vulnerability
