@@ -13,3 +13,4 @@ pyyaml==6.0.1
 setuptools==68.2.2 # not directly required, pinned by Snyk to avoid a vulnerability
 werkzeug==3.0.3
 twisted>=23.10.0rc1 # not directly required, pinned by Snyk to avoid a vulnerability
+requests>=2.32.0 # not directly required, pinned by Snyk to avoid a vulnerability
