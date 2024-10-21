@@ -7,7 +7,7 @@ docutils==0.21.2
 email-validator==2.2.0
 flask==3.0.3
 pydantic==2.9.2
-pydantic-core==2.24.0
+pydantic-core==2.24.2
 pydoctor==23.9.1
 pyyaml==6.0.2
 setuptools==68.2.2 # not directly required, pinned by Snyk to avoid a vulnerability
