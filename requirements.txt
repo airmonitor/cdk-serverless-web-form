@@ -6,7 +6,7 @@ constructs==10.4.2
 docutils==0.21.2
 email-validator==2.2.0
 flask==3.1.0
-pydantic==2.10.5
+pydantic==2.10.6
 pydantic-core==2.27.2
 pydoctor==23.9.1
 pyyaml==6.0.2
